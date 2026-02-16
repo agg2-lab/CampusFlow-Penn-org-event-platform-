@@ -3,12 +3,11 @@ Submitted by: Adam Haney
 
 CampusFlow is an all-in-one platform for Penn student organizations to create events, manage RSVPs/tickets, run real-time QR check-in, and track engagement with analytics.
 
-Time spent: __ hours spent in total
+Time spent: 30 hours spent in total
 
 ---
 
-## Required Features
-The following required functionality is completed:
+Features
 
 - [x] User authentication (email/password)
 - [x] Organization creation + membership model
@@ -23,8 +22,7 @@ The following required functionality is completed:
 
 ---
 
-## Optional Features
-The following optional features are implemented:
+The following additional features are implemented in pt 2 update:
 
 - [x] Google OAuth (one-click sign-in)
 - [x] Email magic links (passwordless sign-in)
@@ -32,20 +30,6 @@ The following optional features are implemented:
 - [x] Personalized “Recommended Events” feed
 - [x] Attendance trends over the last 30 days
 - [x] Hourly check-in timeline + funnel metrics (RSVP → check-in)
-
----
-
-## Additional Features
-The following additional features are implemented:
-
-- [x] Hybrid persistence layer:
-  - MySQL (users, orgs, memberships, tickets)
-  - MongoDB (events, check-ins, analytics)
-- [x] Redis for sessions + real-time pub/sub
-- [x] Nginx reverse proxy with path-based routing (/api/* → backend, /* → frontend)
-- [x] Dockerized full stack via Docker Compose (local dev)
-- [x] AWS deployment setup (ECS Fargate + CloudFront CDN + ALB routing)
-- [x] Dashboard visualizations using Recharts
 
 ---
 
@@ -86,3 +70,4 @@ Another challenge was building reliable QR check-in with real-time updates. The 
 Deployment and local orchestration were also key considerations. Docker Compose made it easy to run the full stack locally, while the AWS setup is structured around ECS Fargate + CloudFront and Nginx/ALB routing for a production-style architecture.
 
 ---
+
