@@ -192,4 +192,5 @@ Campus/
 
 ## License
 
-MIT
+Open
+
