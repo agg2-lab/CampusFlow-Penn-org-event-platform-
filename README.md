@@ -1,196 +1,88 @@
 # CampusFlow
+Submitted by: Adam Haney
 
-**The all-in-one platform for Penn student organizations.** Create events, sell tickets, manage check-in, and engage your community.
+CampusFlow is an all-in-one platform for Penn student organizations to create events, manage RSVPs/tickets, run real-time QR check-in, and track engagement with analytics.
 
-## Architecture
+Time spent: __ hours spent in total
 
-```
-┌──────────────┐     ┌──────────────┐     ┌───────────────┐
-│   Next.js    │────▶│   Express    │────▶│  MongoDB      │
-│   Frontend   │     │   Backend    │     │  (events,     │
-│   (React,    │     │   (REST API, │     │   check-ins,  │
-│   Tailwind)  │     │   Socket.io) │     │   analytics)  │
-└──────┬───────┘     └──────┬───────┘     └───────────────┘
-       │                    │
-       │                    │             ┌───────────────┐
-       │                    └────────────▶│  MySQL        │
-       │                    │             │  (users, orgs,│
-       │                    │             │   memberships,│
-       │                    │             │   tickets)    │
-       │                    │             └───────────────┘
-       │                    │
-       │                    │             ┌───────────────┐
-       │                    └────────────▶│  Redis        │
-       │                                  │  (sessions,   │
-       │                                  │   pub/sub)    │
-  ┌────▼────┐                             └───────────────┘
-  │  Nginx  │
-  │  (proxy,│
-  │   CDN)  │
-  └─────────┘
-```
+---
 
-## Tech Stack
+## Required Features
+The following required functionality is completed:
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | Next.js 14, React 18, TypeScript, Tailwind CSS |
-| Backend | Express.js, TypeScript, Socket.io |
-| SQL DB | MySQL 8 (users, orgs, memberships, tickets) |
-| NoSQL DB | MongoDB 7 (events, check-ins, analytics) |
-| Cache | Redis 7 (sessions, real-time pub/sub) |
-| Auth | JWT, Google OAuth, Email Magic Links |
-| QR | `qrcode` generation + BarcodeDetector API scanning |
-| Charts | Recharts |
-| Infra | Docker, Nginx, AWS ECS Fargate, CloudFront CDN |
+- [x] User authentication (email/password)
+- [x] Organization creation + membership model
+- [x] Role-based access control per org (Admin / Officer / Member)
+- [x] Create events (title, description, date/time, location, tags, capacity)
+- [x] Event listing with pagination
+- [x] Full-text search + filters (tag/date)
+- [x] RSVP / ticket generation with unique QR code per attendee
+- [x] QR code check-in + invalid/duplicate detection
+- [x] Real-time check-in feed (Socket.io)
+- [x] Analytics dashboard (org KPIs + event breakdown)
 
-## Features
+---
 
-### 1. Auth & Roles
-- Email + password registration
-- Google OAuth (one-click sign-in)
-- Email magic links (passwordless)
-- Role-based access: **Admin**, **Officer**, **Member** per org
+## Optional Features
+The following optional features are implemented:
 
-### 2. Event Management
-- Create events with title, description, dates, location, tags, capacity
-- Ticket pricing (free or paid)
-- RSVP with auto-generated QR code tickets
-- Virtual/hybrid event support
-- Full-text search + tag/date filters
-- Personalized "Recommended Events" feed
+- [x] Google OAuth (one-click sign-in)
+- [x] Email magic links (passwordless sign-in)
+- [x] Manual check-in fallback
+- [x] Personalized “Recommended Events” feed
+- [x] Attendance trends over the last 30 days
+- [x] Hourly check-in timeline + funnel metrics (RSVP → check-in)
 
-### 3. Real-Time Check-In
-- Webcam QR code scanning (BarcodeDetector API)
-- Manual check-in fallback
-- Live check-in feed via Socket.io
-- Duplicate/invalid ticket detection
+---
 
-### 4. Analytics Dashboard
-- Org-level KPIs: events, RSVPs, check-ins, revenue, members
-- Event-level breakdown: attendance funnel, ticket status, hourly timeline
-- Attendance trends over last 30 days
-- Drop-off rate and conversion tracking
+## Additional Features
+The following additional features are implemented:
 
-### 5. AWS Deployment
-- Docker containers for frontend + backend
-- ECS Fargate for container orchestration
-- CloudFront CDN for static asset caching
-- CloudFormation IaC template included
-- ALB with path-based routing (`/api/*` → backend, `/*` → frontend)
+- [x] Hybrid persistence layer:
+  - MySQL (users, orgs, memberships, tickets)
+  - MongoDB (events, check-ins, analytics)
+- [x] Redis for sessions + real-time pub/sub
+- [x] Nginx reverse proxy with path-based routing (/api/* → backend, /* → frontend)
+- [x] Dockerized full stack via Docker Compose (local dev)
+- [x] AWS deployment setup (ECS Fargate + CloudFront CDN + ALB routing)
+- [x] Dashboard visualizations using Recharts
 
-## Quick Start
+---
 
-### Prerequisites
-- Node.js 20+
-- Docker & Docker Compose
+## Video Walkthrough
 
-### Development (Docker)
+### Authentication
+**Google OAuth / Email Magic Link Login**  
+gif-here
 
-```bash
-# Clone and start all services
-cp .env.example .env  # edit with your credentials
-docker-compose up -d
+### Event Management
+**Creating an Event + RSVP Ticket Generation**  
+gif-here
 
-# Frontend: http://localhost:3000
-# Backend:  http://localhost:4000
-# Nginx:    http://localhost:80
-```
+### Real-Time Check-In
+**Webcam QR Scanning + Live Check-In Feed**  
+gif-here
 
-### Development (Local)
+### Analytics Dashboard
+**Org KPIs + Event Funnel + Trends**  
+gif-here
 
-```bash
-# Backend
-cd backend
-npm install
-npm run dev    # http://localhost:4000
+GIF created with LICEcap...
 
-# Frontend (separate terminal)
-cd frontend
-npm install
-npm run dev    # http://localhost:3000
-```
+---
 
-### Deploy to AWS
+## Check out the website live
+(Add your deployed URL here)
 
-```bash
-# 1. Deploy infrastructure
-aws cloudformation deploy \
-  --template-file aws/cloudformation.yml \
-  --stack-name campusflow \
-  --capabilities CAPABILITY_IAM
+---
 
-# 2. Build and push containers
-chmod +x aws/deploy.sh
-./aws/deploy.sh
-```
+## Notes
+Challenges encountered while building the app:
 
-## Project Structure
+One major challenge was designing a clean data model across both SQL and NoSQL while keeping the API straightforward. I used MySQL for relational entities like users/orgs/memberships/tickets, and MongoDB for event/check-in/analytics data where flexible schemas and aggregation are helpful.
 
-```
-Campus/
-├── backend/                  # Express.js API
-│   ├── src/
-│   │   ├── config/           # DB connections, env, Redis
-│   │   ├── controllers/      # Route handlers
-│   │   ├── middleware/        # Auth, role checks
-│   │   ├── models/           # Mongoose schemas
-│   │   ├── routes/           # Express routers
-│   │   ├── services/         # Email, QR generation
-│   │   ├── utils/            # JWT, slugs
-│   │   └── index.ts          # Server entry + Socket.io
-│   ├── Dockerfile
-│   └── package.json
-│
-├── frontend/                 # Next.js App Router
-│   ├── src/
-│   │   ├── app/              # Pages (App Router)
-│   │   │   ├── (auth)/       # Login, Register
-│   │   │   ├── events/       # List, Detail, Create
-│   │   │   ├── orgs/         # List, Detail, Create
-│   │   │   ├── checkin/      # QR scanner + check-in log
-│   │   │   ├── dashboard/    # Org dashboard
-│   │   │   ├── admin/        # Analytics dashboard
-│   │   │   └── page.tsx      # Landing page
-│   │   ├── components/       # Reusable UI components
-│   │   ├── hooks/            # Zustand auth store
-│   │   ├── lib/              # API client, utilities
-│   │   └── types/            # TypeScript interfaces
-│   ├── Dockerfile
-│   └── package.json
-│
-├── nginx/                    # Reverse proxy config
-├── aws/                      # CloudFormation + deploy script
-├── docker-compose.yml        # Full stack orchestration
-└── .env.example              # Environment template
-```
+Another challenge was building reliable QR check-in with real-time updates. The workflow needed to handle duplicate scans, invalid tickets, and live visibility for org staff, so Socket.io was used to stream check-in events while Redis supported session and pub/sub patterns.
 
-## API Endpoints
+Deployment and local orchestration were also key considerations. Docker Compose made it easy to run the full stack locally, while the AWS setup is structured around ECS Fargate + CloudFront and Nginx/ALB routing for a production-style architecture.
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/register` | Register with email/password |
-| POST | `/api/auth/login` | Login with email/password |
-| POST | `/api/auth/google` | Google OAuth |
-| POST | `/api/auth/magic-link` | Send magic link email |
-| GET | `/api/auth/magic` | Verify magic link |
-| GET | `/api/auth/me` | Get current user |
-| GET | `/api/events` | List events (search, filter, paginate) |
-| GET | `/api/events/recommended` | Personalized event feed |
-| GET | `/api/events/:id` | Get event details |
-| POST | `/api/events` | Create event |
-| POST | `/api/events/:id/rsvp` | RSVP / get ticket |
-| GET | `/api/orgs` | List organizations |
-| GET | `/api/orgs/mine` | User's organizations |
-| POST | `/api/orgs` | Create organization |
-| POST | `/api/checkin/qr` | Check in via QR code |
-| POST | `/api/checkin/manual` | Manual check-in |
-| GET | `/api/checkin/event/:id` | Check-in list |
-| GET | `/api/analytics/org/:id/dashboard` | Org analytics |
-| GET | `/api/analytics/event/:id` | Event analytics |
-| GET | `/api/analytics/org/:id/trends` | Attendance trends |
-
-## License
-
-Open
-
+---
