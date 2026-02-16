@@ -33,32 +33,6 @@ The following additional features are implemented in pt 2 update:
 
 ---
 
-## Video Walkthrough
-
-### Authentication
-**Google OAuth / Email Magic Link Login**  
-gif-here
-
-### Event Management
-**Creating an Event + RSVP Ticket Generation**  
-gif-here
-
-### Real-Time Check-In
-**Webcam QR Scanning + Live Check-In Feed**  
-gif-here
-
-### Analytics Dashboard
-**Org KPIs + Event Funnel + Trends**  
-gif-here
-
-GIF created with LICEcap...
-
----
-
-## Check out the website live
-(Add your deployed URL here)
-
----
 
 ## Notes
 Challenges encountered while building the app:
@@ -70,4 +44,5 @@ Another challenge was building reliable QR check-in with real-time updates. The 
 Deployment and local orchestration were also key considerations. Docker Compose made it easy to run the full stack locally, while the AWS setup is structured around ECS Fargate + CloudFront and Nginx/ALB routing for a production-style architecture.
 
 ---
+
 
